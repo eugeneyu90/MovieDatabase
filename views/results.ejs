@@ -1,0 +1,55 @@
+<!-- views/index.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Home</title>
+    <% include ./partials/head %>
+  </head>
+  <body>
+    <header>
+      <%- include ./partials/header %>
+    </header>
+    <main class="container ">
+      <section class="row">
+        <div class="col s12 center-align">
+          <h1>Hello movies!</h1>
+        </div>
+      </section>
+      <section>
+        <div class="row">
+          <%- include ./partials/searchForm %>
+        </div>
+        <div class="row">
+          <div class="col">
+            <p>Search results for "<%= searchTerm %>" returned <%= movies.length %> movies.</p>
+          </div>
+        </div>
+      </section>
+      <div class="row"> 
+      <% movies.forEach((movie, index) => { %>
+          <div class="col s2 m3 l4">
+            <div class="card">
+              <div class="card-image waves-effect waves-block waves-light">
+                <img class="activator" src=<%= 'http://image.tmdb.org/t/p/original'+ movie.poster_path %>>
+              </div>
+              <div class="card-content">
+                <span class="card-title activator grey-text text-darken-4"><%= movie.title %><i class="material-icons right">more_vert</i></span>
+                <p><a href=<%="/movie/" + movie.id %>>See More</a></p>
+              </div>
+              <div class="card-reveal">
+                <span class="card-title grey-text text-darken-4"><%= movie.title %><i class="material-icons right">close</i></span>
+                <p><%= movie.plot %></p>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </main>
+    <section class="row">
+      <div class="col s12">
+      </div>
+    </section>
+    <%- include ./partials/footer %>
+  </body>
+</html>
