@@ -1,0 +1,28 @@
+$heading-background-color: 'red';
+$heading-color: 'red';
+$heading-font: 'Helvetica';
+$heading-font-size: '24px';
+
+.heading {
+  color: $heading-background-color;
+  font-family: $heading-font;
+  font-size: $heading-font;
+}
+
+h1 {
+  @extend .heading;
+  color: black;
+}
+
+.display-inline {
+    display: inline
+}
+
+.display-none {
+    display: none
+}
+
+.row {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}

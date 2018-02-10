@@ -1,0 +1,12 @@
+{
+	"version": 3,
+	"file": "styles.css",
+	"sources": [
+		"../scss/styles.scss"
+	],
+	"sourcesContent": [
+		"$heading-background-color: 'red';\r\n$heading-color: 'red';\r\n$heading-font: 'Helvetica';\r\n$heading-font-size: '24px';\r\n\r\n.heading {\r\n  color: $heading-background-color;\r\n  font-family: $heading-font;\r\n  font-size: $heading-font;\r\n}\r\n\r\nh1 {\r\n  @extend .heading;\r\n  color: black;\r\n\r\n}\r\n\r\n.display-inline {\r\n    display: inline\r\n}\r\n\r\n.display-none {\r\n    display: none\r\n}"
+	],
+	"names": [],
+	"mappings": "AAKA,AAAA,QAAQ,EAMR,AANA,EAME,CANO;EACP,KAAK,EANoB,KAAK;EAO9B,WAAW,EALE,WAAW;EAMxB,SAAS,EANI,WAAW,GAOzB;;AAED,AAAA,EAAE,CAAC;EAED,KAAK,EAAE,KAAK,GAEb;;AAED,AAAA,eAAe,CAAC;EACZ,OAAO,EAAE,MACb,GAAE;;AAEF,AAAA,aAAa,CAAC;EACV,OAAO,EAAE,IACb,GAAE"
+}

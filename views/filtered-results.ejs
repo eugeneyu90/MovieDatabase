@@ -1,5 +1,5 @@
 <!-- views/index.ejs -->
-<%= console.log(movies) %>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -22,7 +22,7 @@
         </div>
         <div class="row">
           <div class="col">
-            <p>Search results for "<%= searchTerm %>" returned <%= movies.length %> <% if(movies.length == 1) { %>
+            <p>Filtered results for "<%= filterTerm %>" returned <%= movies.length %> <% if(movies.length == 1) { %>
               movie.
             <% } else { %>
               movies.

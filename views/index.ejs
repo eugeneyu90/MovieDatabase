@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Home</title>
+    <title>Popcorn Database - Trending Movies</title>
     <% include ./partials/head %>
   </head>
   <body>
@@ -11,30 +11,29 @@
       <%- include ./partials/header %>
     </header>
     <main class="container ">
-      <section class="row">
-        <div class="col s12 center-align">
-          <h1>Hello movies!</h1>
-        </div>
-      </section>
-      <section>
-        <div class="row">
-          <%- include ./partials/searchForm %>
-        </div>
-      </section>
+    <section>
+      <div class="row">
+        <%- include ./partials/searchForm %>
+      </div>
+    </section>
+    <section class="row">
+      <div class="col s12 center-align">
+        <h1>What's Popping?</h1>
+      </div>
+    </section>
       <div class="row"> 
       <% movies.forEach((movie, index) => { %>
-          <div class="col s2 m2 l2">
+          <div class="col s4 m4 l4">
             <div class="card">
               <div class="card-image waves-effect waves-block waves-light">
                 <img class="activator" src=<%= 'http://image.tmdb.org/t/p/original'+ movie.poster_path %>>
               </div>
-              <div class="card-content">
-                <span class="card-title activator grey-text text-darken-4"><%= movie.title %><i class="material-icons right">more_vert</i></span>
-                <p><a href=<%="/movie/" + movie.id %>>See More</a></p>
-              </div>
               <div class="card-reveal">
-                <span class="card-title grey-text text-darken-4"><%= movie.title %><i class="material-icons right">close</i></span>
-                <p><%= movie.plot %></p>
+                <i class="card-title material-icons right">close</i>
+                <span class="card-title grey-text text-darken-4"><%= movie.title %></span>
+                <p><%= `Release Date: ${movie.release_date}` %></p>
+                <p><%= `TMDB Rating: ${movie.vote_average}/10` %></p>
+                <p><a href=<%="/movie/" + movie.id %>>See More</a></p>
               </div>
             </div>
           </div>

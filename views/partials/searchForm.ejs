@@ -1,34 +1,42 @@
-<!-- view/partials/searchForm.ejs -->
+<!-- view/partials/searchForms.ejs -->
 <script>
 
-  function checkInput() {
-    let userInput = $('#icon_movie').val()
+  function checkInput(formName) {
+    // let userInput = $('#icon_movie').val()
+    let userInput = $(`form[name="${formName}"]`).find('input').val()
     console.log(`The user input is [${userInput}].`)
     if(userInput == '') {
       $('#error').show()
       return false
     } else {
       console.log('Submitting form...')
-      document.forms['searchForm'].submit()
+      document.forms[formName].submit()
+      $('#error').hide()
       return true
     }
   }
-  // $('#searchForm').submit(function(e) {
-  //   e.preventDefault()
-  // })
 </script>
-<form name="searchForm" class="col s12" action="/search" method="GET">
-  <div class="row">
-    <div class="input-field col s6">
+<div class="row">
+  <form name="filterForm" class="col s6" action="/filter" method="GET">
+    <div class="input-field">
       <i class="material-icons prefix">movie</i>
-      <input id="icon_movie" type="text" class="validate" name="searchTerm" onkeydown="if (event.keyCode == 13) { checkInput(); return false }">
-      <label for="icon_movie">Movie</label>
-      <button class="btn waves-effect waves-light" type="button" onclick="checkInput()">Search</button>
+      <input id="icon_movie" type="text" class="validate" name="filterTerm" onkeydown="if (event.keyCode == 13) { checkInput('filterForm'); return false }">
+      <label for="icon_movie">Filter Movies</label>
+      <!-- <button class="btn waves-effect waves-light" type="button" onclick="checkInput('filterForm')">Search</button> -->
     </div>
-  </div>
-</form>
+  </form>
+  <form name="searchForm" class="col s6" action="/search" method="GET">
+    <div class="input-field">
+      <i class="material-icons prefix">movie</i>
+      <input id="icon_movie_search" type="text" class="validate" name="searchTerm" onkeydown="if (event.keyCode == 13) { checkInput('searchForm'); return false }">
+      <label for="icon_movie_search">Search a Movie!</label>
+      <!-- <button class="btn waves-effect waves-light" type="button" onclick="checkInput('searchForm')">Search</button> -->
+    </div>
+  </form>
+</div>
+
 <div id="error" class="row display-none">
   <div class="col" >
-    <p class="red">Please enter something at least! I can't read your mind!</p>
+    <p class="red-text">Please enter something at least! I can't read your mind!</p>
   </div>
 </div>

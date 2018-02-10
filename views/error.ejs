@@ -1,0 +1,30 @@
+<!-- views/error.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title><%= 'Movie ID does not exist!'%></title>
+    <% include ./partials/head %>
+  </head>
+  <body>
+    <header>
+      <%- include ./partials/header %>
+    </header>
+    <main class="container ">
+    <section class="row">
+    <%- include ./partials/searchForm %>
+    </section>
+    <section class="row">
+      <div class="col s12 center-align red-text">
+        <i class="material-icons prefix large">error</i>
+        <h2 class="red-text" ><%= message %></h1>
+      </div>
+    </section>
+    </main>
+    <section class="row">
+      <div class="col s12">
+      </div>
+    </section>
+    <%- include ./partials/footer %>
+  </body>
+</html>

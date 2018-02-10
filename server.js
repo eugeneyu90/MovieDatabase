@@ -15,26 +15,117 @@ app.use(express.static('public'))
 app.set('view engine', 'ejs')
 
 
+app.use((req, res, next) => {
+  console.log(`${new Date()} @ ${req.url}`)
+  next() //allows passing onto next app.use
+})
+
+
 app.get('/', (req, res) => {
   res.render('index', { 
     movies: getMovies() 
   })
 })
 
-app.get('/search', (req, res) => {
-  let { searchTerm } = req.query
-  res.render('results', { 
-    movies: filterMovies(searchTerm),
-    searchTerm: searchTerm
+
+// app.get('/filter', (req, res) => {
+app.get('/filter', (req, res) => {
+  let { filterTerm } = req.query
+  res.render('filtered-results', {
+    movies: filterMovies(filterTerm),
+    filterTerm: filterTerm
   })
 })
 
+// searches and displays results from TheMovieDb search API
+app.get('/search', (req, res) => {
+  let { searchTerm } = req.query
+  let promiseObj = searchMovie(searchTerm)
+    .then(function(fulfilled) {
+      res.render('results', {
+        movies: fulfilled,
+        searchTerm: searchTerm
+      })
+    })
+    .catch(function(error) {
+      console.log(error.message)
+    })
+  })
+
 app.get('/movie/:movieId', (req, res) => {
   let {movieId} = req.params
-  res.render('movie',{
-    movie: getMovies(movieId)
+  let foundMovie = getMovies(movieId)
+  if(foundMovie == undefined) {
+    res.render('error', {
+      message: `This movie id [${movieId}] is not in the database.` 
+    })
+  } else {
+    res.render('movie',{
+      movie: getMovies(movieId)
+    })
+  }
+})
+let searchResults
+
+let searchMovie = (searchTerm) => new Promise (function(resolve, reject) {
+  let filename = 'searchResults'
+  let options = {
+    method: 'GET',
+    url: 'https://api.themoviedb.org/3/search/movie',
+    qs: {
+      include_adult: 'false',
+      page: '1',
+      language: 'en-US',
+      api_key: '7a9602f5224d26b4db42b9c580059391',
+      query: searchTerm
+    }
+  }
+  request(options, function(error, response, body) { //TMDb API Search Request
+    if (error) console.log(error)
+    // console.log(body)
+    let obj = JSON.parse(body)
+    // console.log(obj)
+    // let totalResults = obj.total_results
+    fs.writeFile(`${filename}.txt`, JSON.stringify(obj.results), function(err) {
+      //checking if divs & classes exist when html is returned in a saved file
+      if (err) {
+        console.log(err)
+      } else {
+        console.log(`Wrote successfully to ${filename}.txt`)
+      }
+      fs.readFile(`${filename}.txt`, function(err, data) {
+        // MUST USE PROMISES
+        if (err) {
+          console.log(err)
+          reject('cannot read file...')
+        } else {
+          console.log(`Read successfully from ${filename}.txt`)
+        }
+        // updateSearchResults(filename)
+        searchResults = JSON.parse(data)
+        // console.log(searchResults)
+        resolve(searchResults)
+      })
+    })
   })
 })
+
+// var getResults = (searchTerm) => {
+//   searchMovie(searchTerm)
+//   return searchResults
+// }
+
+var getResults = (searchTerm) => new Promise(
+  function (resolve, reject) {
+    if (searchTerm != undefined) {
+        searchMovie(searchTerm)
+      resolve(searchResults)
+    } else {
+      reject('SearchTerm is undefined')
+    }
+  }
+)
+
 
 
 var getMovies = (movieId) => {
@@ -42,12 +133,11 @@ var getMovies = (movieId) => {
   if (movieId === undefined) {
     return movieDB
   } else {
-
+    //console.log(`Found ID: ${movieId}.`)
     let foundMovie = movieDB.find((movie) => {
-      if(movie.id == movieId) {
+      // console.log(`Movie's Database is checking ${movie.id} with ${movieId}`)
+      if(Number(movie.id) == Number(movieId)) {
         return movie
-      } else {
-        console.log('No movies matched with that id!')
       }
     })
     return foundMovie
@@ -80,6 +170,31 @@ var filterMovies = (searchTerm) => {
   return filteredDB
 }
 
+var getPopularMoviesList = () => {
+  var options = {
+    method: 'GET',
+    url: 'https://api.themoviedb.org/3/movie/popular',
+    qs: {
+      api_key: '7a9602f5224d26b4db42b9c580059391',
+      language: 'en-US',
+      page: '1'
+    }
+  }
+  request(options, function(error, response, body) {
+    if (error) console.log(error)
+    let obj = JSON.parse(body)
+    // console.log(obj)
+    fs.writeFile('popular.txt', JSON.stringify(obj.results), function(err) {
+      //checking if divs & classes exist when html is returned in a saved file
+      if (err) {
+        console.log(err)
+      } else {
+        console.log(`Wrote successfully to popular.txt`)
+      }
+    })
+  })
+  updateMovieDB('popular')
+}
 
 // Function get retrieving a list of movies
 var getMoviesFromListId = (listId) => {
@@ -96,7 +211,7 @@ var getMoviesFromListId = (listId) => {
   request(options, function(error, response, body) {
     if (error) console.log(error)
     let obj = JSON.parse(body)
-    fs.writeFile(`${listId}.txt`, JSON.stringify(obj.items), function(err) {
+    fs.writeFileSync(`${listId}.txt`, JSON.stringify(obj.items), function(err) {
       //checking if divs & classes exist when html is returned in a saved file
       if (err) {
         console.log(err)
@@ -110,12 +225,24 @@ var getMoviesFromListId = (listId) => {
 let movieDB
 // console.log(movieDB)
 
-var updateMovieDB = (listId) => {
-  fs.readFile(`${listId}.txt`, function(err, data) { // MUST USE PROMISES
+
+var updateSearchResults = (filename) => {
+  fs.readFile(`${filename}.txt`, function(err, data) { // MUST USE PROMISES
     if (err) {
       console.log(err)
     } else {
-      console.log(`Read successfully from ${listId}.txt`)
+      console.log(`Read successfully from ${filename}.txt`)
+    }
+    searchResults = JSON.parse(data)
+  })
+}
+
+var updateMovieDB = (filename) => {
+  fs.readFile(`${filename}.txt`, function(err, data) { // MUST USE PROMISES
+    if (err) {
+      console.log(err)
+    } else {
+      console.log(`Read successfully from ${filename}.txt`)
     }
     movieDB = JSON.parse(data)
     // console.log(movieDB)
@@ -141,7 +268,9 @@ var getCreditsFromMovieId = (movieId) => {
 }
 
 // getCreditsFromMovieId('198663')
-getMoviesFromListId('28')
+//getMoviesFromListId('1')
+getPopularMoviesList()
+
 const baseImageUrl = 'http://image.tmdb.org/t/p/original'
 // console.log(movieDB)
 
