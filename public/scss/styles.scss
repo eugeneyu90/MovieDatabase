@@ -26,3 +26,26 @@ h1 {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
+.tmdb-logo {
+  width: 50px;
+}
+
+.rating {
+  display: inline-block;
+  padding: 20px 0px;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.backdrop-img {
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 300px;
+}
+
+.movie-info {
+  padding: 20px;
+}

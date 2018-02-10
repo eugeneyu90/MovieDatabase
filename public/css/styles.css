@@ -23,4 +23,27 @@ h1 {
   width: 50px;
 }
 
+.tmdb-logo {
+  width: 50px;
+}
+
+.rating {
+  display: inline-block;
+  padding: 20px 0px;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.backdrop-img {
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 300px;
+}
+
+.movie-info {
+  padding: 20px;
+}
+
 /*# sourceMappingURL=styles.css.map */

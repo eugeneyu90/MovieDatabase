@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title><%= movie.title + ' (' + movie.release_date + ') - MyMovieDataBase' %></title>
+    <title><%= movie.title + ' (' + movie.release_date + ') - Popcorn DataBase' %></title>
     <% include ./partials/head %>
   </head>
   <body>
@@ -12,12 +12,9 @@
     </header>
     <main class="container ">
       <section class="row">
-        <div class="col s12 center-align">
-          <h1>Hello movies!</h1>
-        </div>
-      </section>
-      <section class="row">
         <%- include ./partials/searchForm %>
+      </section>
+      <section class="row backdrop-img" style="background-image: url('<%= 'http://image.tmdb.org/t/p/original' + movie.backdrop_path%>');">
       </section>
       <div class="row"> 
         <div class="col s2 m3 l4">
@@ -25,14 +22,16 @@
             <div class="card-image waves-effect waves-block waves-light">
               <img class="activator" src=<%= 'http://image.tmdb.org/t/p/original'+ movie.poster_path %>>
             </div>
-            <div class="card-content">
-              <span class="card-title activator grey-text text-darken-4"><%= movie.title %><i class="material-icons right">more_vert</i></span>
-              <p><a href=<%="/movie/" + movie.id %>>See More</a></p>
-            </div>
-            <div class="card-reveal">
-              <span class="card-title grey-text text-darken-4"><%= movie.title %><i class="material-icons right">close</i></span>
-              <p><%= movie.overview %></p>
-            </div>
+          </div>
+        </div>
+        <div class="col s10 m9 l8">
+          <div class="movie-info">
+            <h3><%= movie.title %></h3>
+            <img class="tmdb-logo" src="../img/tmdb-logo.svg"></img>
+            <span><%= `${movie.vote_average}/10` %></span>
+            <p><%= `Release Date: ${movie.release_date}` %></p>
+            <p>Plot:</p>
+            <p><%= `${movie.overview}` %></p>
           </div>
         </div>
       </div>
